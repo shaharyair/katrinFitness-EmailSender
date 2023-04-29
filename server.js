@@ -5,6 +5,8 @@ const nodemailer = require("nodemailer");
 const cors = require("cors");
 const fs = require("fs");
 
+require("dotenv").config();
+
 const app = express();
 
 app.use(cors());
@@ -21,7 +23,7 @@ app.post("/send-email", (req, res) => {
     service: "gmail",
     auth: {
       user: "shaharyair12@gmail.com",
-      pass: "oczacfbnxjftwaat",
+      pass: process.env.GMAIL_PASS,
     },
   });
 
