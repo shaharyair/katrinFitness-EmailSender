@@ -9,7 +9,16 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: "https://katrin-fitness-nodejs.vercel.app",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -19,8 +28,6 @@ app.use(express.static(path.join(__dirname + "/public")));
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 app.post("/send-email", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-
   const { fullName, phoneNumber } = req.body;
 
   const mailOptions = {
@@ -36,6 +43,7 @@ app.post("/send-email", async (req, res) => {
   try {
     await sgMail.send(mailOptions);
     console.log("Email sent");
+    res.header("Access-Control-Allow-Origin", "*");
     res.send("המייל נשלח בהצלחה!");
   } catch (error) {
     console.error(error);
