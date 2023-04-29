@@ -11,6 +11,11 @@ const app = express();
 
 const corsOptions = {
   origin: "https://katrin-fitness-nodejs.vercel.app",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
