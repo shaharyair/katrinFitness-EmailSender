@@ -9,7 +9,11 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: "https://katrin-fitness-nodejs.vercel.app",
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
