@@ -2,10 +2,6 @@
   "routes": [
     {
       "src": "/send-email",
-      "dest": "server.js"
-    },
-    {
-      "src": "/(.*)",
       "dest": "/server.js"
     }
   ]
