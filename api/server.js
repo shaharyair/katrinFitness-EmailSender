@@ -31,7 +31,7 @@ app.post("/send-email", async (req, res) => {
     to: "shaharyair12@gmail.com",
     subject: "קאתרין יאיר מאמנת כושר - מתעניינת חדשה!",
     html: fs
-      .readFileSync(__dirname + "../email-template.html", "utf-8")
+      .readFileSync(__dirname + "/email-template.html", "utf-8")
       .replace(/%fullName%/g, fullName)
       .replace(/%phoneNumber%/g, phoneNumber),
   };
