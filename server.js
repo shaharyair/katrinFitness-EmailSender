@@ -19,6 +19,7 @@ app.use(express.static(path.join(__dirname + "/public")));
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 app.post("/send-email", async (req, res) => {
+  console.log("Endpoint hit!");
   const { fullName, phoneNumber } = req.body;
 
   const mailOptions = {
