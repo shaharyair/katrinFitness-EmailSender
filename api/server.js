@@ -1,9 +1,9 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
+const nodemailer = require("nodemailer");
 const cors = require("cors");
 const fs = require("fs");
-const sgMail = require("@sendgrid/mail");
 
 require("dotenv").config();
 
@@ -16,15 +16,16 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname + "/public")));
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-app.get("/send-email", (req, res) => {
-  res.send("This is the send email endpoint");
-});
-
-app.post("/send-email", async (req, res) => {
-  console.log("Endpoint hit!");
+app.post("/send-email", (req, res) => {
   const { fullName, phoneNumber } = req.body;
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "shaharyair12@gmail.com",
+      pass: process.env.GMAIL_PASS,
+    },
+  });
 
   const mailOptions = {
     from: "shaharyair12@gmail.com",
@@ -36,15 +37,15 @@ app.post("/send-email", async (req, res) => {
       .replace(/%phoneNumber%/g, phoneNumber),
   };
 
-  try {
-    await sgMail.send(mailOptions);
-    console.log("Email sent");
-    res.header("Access-Control-Allow-Origin", "*");
-    res.send("המייל נשלח בהצלחה!");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("קרתה שגיאה בשליחת המייל.");
-  }
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send("קרתה שגיאה בשליחת המייל.");
+    } else {
+      console.log("Email sent");
+      res.send("המייל נשלח בהצלחה!");
+    }
+  });
 });
 
 const PORT = process.env.PORT || 3000;
