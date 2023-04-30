@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname + "/public")));
 
-app.post("/send-email", (req, res) => {
+app.post("/send-email", async (req, res) => {
   const { fullName, phoneNumber } = req.body;
 
   const transporter = nodemailer.createTransport({
@@ -37,15 +37,14 @@ app.post("/send-email", (req, res) => {
       .replace(/%phoneNumber%/g, phoneNumber),
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      res.status(500).send("קרתה שגיאה בשליחת המייל.");
-    } else {
-      console.log("Email sent");
-      res.send("המייל נשלח בהצלחה!");
-    }
-  });
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent:", info.messageId);
+    res.send("המייל נשלח בהצלחה!");
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).send("קרתה שגיאה בשליחת המייל.");
+  }
 });
 
 const PORT = process.env.PORT || 3000;
