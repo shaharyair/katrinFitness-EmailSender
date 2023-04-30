@@ -2,7 +2,7 @@
   "routes": [
     {
       "src": "/send-email",
-      "dest": "/api/send-email.js"
+      "dest": "/api/server.js"
     }
   ]
 }
