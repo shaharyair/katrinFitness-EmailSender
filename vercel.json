@@ -1,8 +1,0 @@
-{
-  "routes": [
-    {
-      "src": "/send-email",
-      "dest": "/api/server.js"
-    }
-  ]
-}
